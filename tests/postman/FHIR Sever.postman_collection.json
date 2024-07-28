@@ -1,0 +1,470 @@
+{
+	"info": {
+		"_postman_id": "ec1f7201-076c-41fc-afbf-ab9111cd0891",
+		"name": "FHIR Sever",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "33292977"
+	},
+	"item": [
+		{
+			"name": "GetPatient",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response message is correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Patient Data Fetched Successfully!!\");",
+							"});",
+							"",
+							"pm.test(\"Response contains patient data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"data\");",
+							"    pm.expect(jsonData.data).to.have.property(\"id\", 12);",
+							"    pm.expect(jsonData.data).to.have.property(\"identifier\", \"1235\");",
+							"    pm.expect(jsonData.data).to.have.property(\"name\", \"Gauav Sharma\");",
+							"    pm.expect(jsonData.data).to.have.property(\"birth_date\", \"1979-12-31T18:30:00.000Z\");",
+							"    pm.expect(jsonData.data).to.have.property(\"gender\", \"male\");",
+							"    pm.expect(jsonData.data).to.have.property(\"address\", \"123 Main St, Anytown, USA\");",
+							"    pm.expect(jsonData.data).to.have.property(\"telecom\", \"555-1234\");",
+							"    pm.expect(jsonData.data).to.have.property(\"active\", true);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "tester@123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "gaurav123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/patients/12",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"patients",
+						"12"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "CreatePatient",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const moment = require('moment');",
+							"",
+							"// Ensure the request payload is correct",
+							"pm.test(\"Request payload is correct\", function () {",
+							"    let requestData = pm.request.body.raw;",
+							"    console.log(\"Request Payload: \", requestData);",
+							"    ",
+							"    let parsedRequest = JSON.parse(requestData);",
+							"    pm.expect(parsedRequest).to.have.property(\"name\");",
+							"    pm.expect(parsedRequest).to.have.property(\"gender\");",
+							"    pm.expect(parsedRequest).to.have.property(\"address\");",
+							"});",
+							"",
+							"// Validate the response status code",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Validate the response message",
+							"pm.test(\"Response message is correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Patient created Successfully!!\");",
+							"});",
+							"",
+							"// Validate the response data",
+							"pm.test(\"Response contains patient data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"data\");",
+							"    pm.expect(jsonData.data).to.have.property(\"id\", 66);",
+							"    pm.expect(jsonData.data).to.have.property(\"identifier\", \"66\");",
+							"    pm.expect(jsonData.data).to.have.property(\"name\", \"Aniket ram\");",
+							"",
+							"    // Convert the dates to the same format and ignore timezone differences",
+							"    var expectedDate = moment(\"1980-01-01\").format('YYYY-MM-DD');",
+							"    var responseDate = moment(jsonData.data.birth_date).format('YYYY-MM-DD');",
+							"    pm.expect(responseDate).to.eql(expectedDate);",
+							"    ",
+							"    pm.expect(jsonData.data).to.have.property(\"gender\", \"male\");",
+							"    pm.expect(jsonData.data).to.have.property(\"address\", \"123 Main St, Anytown, USA\");",
+							"    pm.expect(jsonData.data).to.have.property(\"telecom\", \"555-1234\");",
+							"    pm.expect(jsonData.data).to.have.property(\"active\", true);",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "tester@123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "gaurav123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\":\"66\",\n    \"identifier\": \"66\",\n    \"active\": true,\n    \"name\": \"Aniket ram\",\n    \"telecom\": \"555-1234\",\n    \"gender\": \"male\",\n    \"birth_date\": \"1980-01-01\",\n    \"address\": \"123 Main St, Anytown, USA\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/patients",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"patients"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RegisterUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Request payload is correct\", function () {",
+							"    let requestData = pm.request.body.raw;",
+							"    console.log(\"Request Payload: \", requestData);",
+							"    ",
+							"    let parsedRequest = JSON.parse(requestData);",
+							"    pm.expect(parsedRequest).to.have.property(\"username\");",
+							"    pm.expect(parsedRequest).to.have.property(\"password\");",
+							"});",
+							"",
+							"// Validate the response status code",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"// Validate the response message",
+							"pm.test(\"Response message is correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"User registered successfully\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\":1112,\n    \"username\":\"1122\",\n    \"password\":\"tester@123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LoginUser",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response message is correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Logged in Successfully!\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"username\":\"test2\",\n    \"password\":\"tester@123\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdatePatient",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const moment = require('moment');",
+							"",
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response message is correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Updated Successfully\");",
+							"});",
+							"",
+							"pm.test(\"Response contains patient data\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData).to.have.property(\"data\");",
+							"    pm.expect(jsonData.data).to.have.property(\"resourceType\", \"Patient\");",
+							"    pm.expect(jsonData.data).to.have.property(\"id\", \"34\");",
+							"",
+							"    // Check identifier",
+							"    pm.expect(jsonData.data).to.have.property(\"identifier\").that.is.an('array');",
+							"    pm.expect(jsonData.data.identifier[0]).to.have.property(\"value\", \"34\");",
+							"",
+							"    // Check active status",
+							"    pm.expect(jsonData.data).to.have.property(\"active\", true);",
+							"",
+							"    // Check name",
+							"    pm.expect(jsonData.data).to.have.property(\"name\").that.is.an('array');",
+							"    pm.expect(jsonData.data.name[0]).to.have.property(\"text\", \"Aniket\");",
+							"",
+							"    // Check telecom",
+							"    pm.expect(jsonData.data).to.have.property(\"telecom\").that.is.an('array');",
+							"    pm.expect(jsonData.data.telecom[0]).to.have.property(\"value\", \"555-1234\");",
+							"",
+							"    // Check gender",
+							"    pm.expect(jsonData.data).to.have.property(\"gender\", \"male\");",
+							"",
+							"    // Convert and check birth date",
+							"    var expectedDate = moment(\"1980-01-01\").format('YYYY-MM-DD');",
+							"    var responseDate = moment(jsonData.data.birth_date).format('YYYY-MM-DD');",
+							"    pm.expect(responseDate).to.eql(expectedDate);",
+							"",
+							"    // Check address",
+							"    pm.expect(jsonData.data).to.have.property(\"address\").that.is.an('array');",
+							"    pm.expect(jsonData.data.address[0]).to.have.property(\"text\", \"123 Main St, Anytown, USA\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "tester@123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "gaurav123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\":\"34\",\n    \"identifier\": \"34\",\n    \"active\": true,\n    \"name\": \"Aniket\",\n    \"telecom\": \"555-1234\",\n    \"gender\": \"male\",\n    \"birth_date\": \"1980-01-01\",\n    \"address\": \"123 Main St, Anytown, USA\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/patients/34",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"patients",
+						"34"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeletePatient",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response message is correct\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Patient Deleted Successfully!!\");",
+							"});",
+							""
+						],
+						"type": "text/javascript",
+						"packages": {}
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "basic",
+					"basic": [
+						{
+							"key": "password",
+							"value": "tester@123",
+							"type": "string"
+						},
+						{
+							"key": "username",
+							"value": "gaurav123",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/patients/66",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"patients",
+						"66"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
