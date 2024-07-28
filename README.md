@@ -1,14 +1,14 @@
 # FHIR-API-Server
 
 ## Overview
-This project is a FHIR-API server implemented in Node.js. It includes functionalities for reading, updating, and deleting patient information. The server uses basic authentication and is tested using Postman.
+This project is a FHIR-API (Fast Healthcare Interoperability Resources) server implemented using Node.js. The server provides CRUD (Create, Read, Update, Delete) functionalities for managing patient information, along with user registration ,login and authentication . Server has JWT token based authentication which secured the Patient data from unauthorized Users.
 
 ## Features
 
 - Node.js Project
 - SQL scripts for setting up the Patient data backend
 - FHIR API server capable of CRUD operations on patient info
-- Authentication
+- Authentication with JWT Token
 - Postman tests for API verification
 
 
@@ -33,7 +33,7 @@ This project is a FHIR-API server implemented in Node.js. It includes functional
     ```
 3. Create the DATABASE and TABLES using the `src/database.sql` script in PostgreSQL:
 
-4. Configure the database connection in `src/config/db-config.js`:
+4. Configure the database connection in `src/config/db-config.js` :
     ```javascript
     const database = new Pool({
     user: "username",
