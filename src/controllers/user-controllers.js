@@ -1,11 +1,15 @@
 const database = require("../config/db-config.js");
 const jwt = require("jsonwebtoken");
-const SECRET_KEY = "tester@12345";
+const SECRET_KEY = "tester@12345"; //Secret key is generally stored in .env file but due to some times it will not working from .env file 
 
 const registerUser = async (req, res) => {
   try {
     const { id, username, password } = req.body;
-
+    if (!id || !username || !password) {
+      return res
+        .status(400)
+        .json({ error: "ID, username, and password are required" });
+    }
     const userCheckById = await database.query(
       "SELECT * FROM users WHERE id = $1",
       [id]
@@ -42,7 +46,9 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   try {
     const { username, password } = req.body;
-
+    if (!username || !password) {
+      return res.status(400).json({ error: "Username and password are required" });
+    }
     const result = await database.query(
       "SELECT * FROM users WHERE username = $1",
       [username]

@@ -7,16 +7,18 @@ const createPatient = async (req, res) => {
 
     const { id } = fhirPatient;
 
+    if (!id) {
+      return res.status(400).json({ error: "Patient ID is required" });
+    }
+
     const patientCheck = await database.query(
       "SELECT * FROM patients WHERE id = $1 OR identifier = $2",
       [id, fhirPatient.identifier[0].value]
     );
     if (patientCheck.rows.length > 0) {
-      return res
-        .status(400)
-        .json({
-          error: "Patient with the given ID or identifier already exists",
-        });
+      return res.status(400).json({
+        error: "Patient with the given ID or identifier already exists",
+      });
     }
 
     const result = await database.query(
@@ -45,6 +47,11 @@ const createPatient = async (req, res) => {
 const getPatientById = async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ error: "Patient ID is required" });
+    }
+
     const result = await database.query(
       "SELECT * FROM patients WHERE id = $1",
       [id]
@@ -66,11 +73,16 @@ const updatePatient = async (req, res) => {
   try {
     const { id } = req.params;
     const fhirPatient = req.fhirResource;
+
+    if (!id) {
+      return res.status(400).json({ error: "Patient ID is required" });
+    }
+
     const patientCheck = await database.query(
       "SELECT * FROM patients WHERE id = $1",
       [id]
     );
-    console.log(patientCheck,"---")
+
     if (patientCheck.rows.length === 0) {
       return res.status(404).json({ error: "Patient not found" });
     }
@@ -100,6 +112,11 @@ const updatePatient = async (req, res) => {
 const deletePatient = async (req, res) => {
   try {
     const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({ error: "Patient ID is required" });
+    }
+
     await database.query("DELETE FROM patients WHERE id = $1", [id]);
     res.status(200).json({ message: "Patient Deleted Successfully!!" });
   } catch (err) {
