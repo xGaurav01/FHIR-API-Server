@@ -31,7 +31,9 @@ This project is a FHIR-API (Fast Healthcare Interoperability Resources) server i
     ```sh
     npm install
     ```
-3. Create the DATABASE and TABLES using the `src/database.sql` script in PostgreSQL:
+3. Setup the PostgresSQL or MYSQL from official documentation of PostgresSQL or MYSQL:
+
+4. After finishing setup of PostgresSQL Create the DATABASE and TABLES using the script file `src/database.sql` :
 
 4. Configure the database connection in `src/config/db-config.js` :
     ```javascript
